@@ -1,0 +1,23 @@
+h1{
+    font-size: 45px;
+    font-weight: bold;
+    text-align: center;
+}
+input{
+    width: 100%;
+}
+/* .col-width{
+ width: 21%; 
+} */
+
+.left{
+    text-align: left;
+}
+
+.sh-margin{
+    margin: 10px 5px;
+}
+
+.sh-width-btn{
+    width: 80px;
+}

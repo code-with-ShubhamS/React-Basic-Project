@@ -3,29 +3,40 @@ import { createContext, useReducer} from "react";
 export const MyContext = createContext({
   postList: [],
   addList: () => {},
-  deleteList: () => {}
+  deleteList: () => {},
+  fetchingDataFromServer:() => {}
 });
  
 function postListReducer(currValPostList,action){
-    let finalVal=currValPostList
+    let finalVal=currValPostList;
+    let finalId;
+
      if(action.type==="DELETE_POST"){
       finalVal = currValPostList.filter(item=>item.id!=action.payload.postId)
      }
-     if(action.type==="ADD_ITEM"){
-       let lastIdx=currValPostList.length-1
-       let finalId= parseInt(currValPostList[lastIdx].id) + 1;
+     else if(action.type==="FETCH_DATA"){
+      finalVal=action.payload.posts;
+     }
+     else if(action.type==="ADD_ITEM"){
+      if(currValPostList.length===0){
+        finalId=1;
+      }
+      else{
+        let lastIdx=currValPostList.length-1
+         finalId= parseInt(currValPostList[lastIdx].id) + 1;
+      }
        finalVal=[...currValPostList,{
         id:finalId,
-        tittle:action.payload.tittle,
-        description:action.payload.description,
+        title:action.payload.tittle,
+        body:action.payload.description,
         tags:action.payload.tags,
-        likes:Math.floor(Math.random()*100)
+        reactions:Math.floor(Math.random()*100)
        }]
      }
     return finalVal;
 }
 function ContextProvider({ children }) {
-  const [postList, dispacher] = useReducer(postListReducer,default_post_list);
+  const [postList, dispacher] = useReducer(postListReducer,[]);
 
   function addList(e) {
     e.preventDefault();
@@ -52,6 +63,15 @@ function ContextProvider({ children }) {
     })
   }
 
+  function fetchingDataFromServer(posts){
+      dispacher({
+        type:"FETCH_DATA",
+        payload:{
+          posts
+        }
+      })
+  }
+
   function deleteList(postId){
     dispacher({
       type:"DELETE_POST",
@@ -61,33 +81,33 @@ function ContextProvider({ children }) {
     });
   }
   return(
-    <MyContext.Provider value={{postList,addList,deleteList}}>
+    <MyContext.Provider value={{postList,addList,deleteList,fetchingDataFromServer}}>
       {children}
     </MyContext.Provider>
   );
 };
 export default ContextProvider;
 
-const default_post_list= [{
-    id:'1',
-    tittle:"Tittle",
-    description:"Description",
-    tags:["tags","ViralTags"],
-    likes:5
-    },
-   {
-    id:'2',
-    tittle:"going To Chennai",
-    description:"My school holiday is started and in this holiday we are going to mumbai for enjoying my vacations",
-    tags:["holidays","Chennai","coding","Vacations","enjoying"],
-    likes:100
-    },
-   {
-    id:'3',
-    tittle:"Vacation",
-    description:"Vacations are a wonderful escape from daily routines, offering relaxation and adventure. They provide an opportunity to explore new places, enjoy nature, and create lasting memories with family and friends.",
-    tags:["holidays","Vacations","enjoying"],
-    likes:69
-    }
-];
+// const default_post_list= [{
+//     id:'1',
+//     tittle:"Tittle",
+//     description:"Description",
+//     tags:["tags","ViralTags"],
+//     likes:5
+//     },
+//    {
+//     id:'2',
+//     tittle:"going To Chennai",
+//     description:"My school holiday is started and in this holiday we are going to mumbai for enjoying my vacations",
+//     tags:["holidays","Chennai","coding","Vacations","enjoying"],
+//     likes:100
+//     },
+//    {
+//     id:'3',
+//     tittle:"Vacation",
+//     description:"Vacations are a wonderful escape from daily routines, offering relaxation and adventure. They provide an opportunity to explore new places, enjoy nature, and create lasting memories with family and friends.",
+//     tags:["holidays","Vacations","enjoying"],
+//     likes:69
+//     }
+// ];
 

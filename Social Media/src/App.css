@@ -39,7 +39,17 @@
     gap: 20px;
     padding: 20px;
     flex-wrap: wrap;
+    height: 85vh;
+    position: relative;
+    overflow-y: scroll;
 }
 .myDeleteBtn{
     cursor: pointer;
+}
+
+.myEmptyMessage{
+    margin-top: 100px;
+}
+.card{
+    min-height: 10rem;
 }
